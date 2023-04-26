@@ -1,4 +1,4 @@
-package ru.hse.buildingapp
+package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.hse.buildingapp.R
+import ru.hse.buildingapp.robotoFamily
 
 class ProjectsScreen private constructor() {
     companion object {
@@ -24,7 +26,7 @@ class ProjectsScreen private constructor() {
         }
 
         @Composable
-        fun view() {
+        fun View() {
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -48,11 +50,13 @@ class ProjectsScreen private constructor() {
                         )
                         .padding(top = 30.dp)) {
                     ProjectCard(title = "Modification of al Ruwaiyyah Dining \n" +
-                            "4th Floor Evp Offices", imageId = R.drawable.projects_screen_lifting_crane_icon, status = ProjectStatus.PREPARING)
+                            "4th Floor Evp Offices", imageId = R.drawable.projects_screen_lifting_crane_icon, status = ProjectStatus.PREPARING
+                    )
                     Divider()
                     Spacer(Modifier.height(20.dp))
                     ProjectCard(title = "Building a model school with a\n" +
-                            "capacity of 500 students", imageId = R.drawable.projects_screen_house_icon, status = ProjectStatus.DONE)
+                            "capacity of 500 students", imageId = R.drawable.projects_screen_house_icon, status = ProjectStatus.DONE
+                    )
                     Divider()
                     Spacer(Modifier.height(20.dp))
                     ProjectCard(title = "Solid waste removal station", imageId = R.drawable.projects_screen_lifting_crane_icon, status = ProjectStatus.ON_PROGRESS)

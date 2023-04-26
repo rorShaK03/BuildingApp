@@ -1,4 +1,4 @@
-package ru.hse.buildingapp
+package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,11 +20,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.hse.buildingapp.R
+import ru.hse.buildingapp.robotoFamily
 
 class ProjectRequestScreen private constructor() {
     companion object {
         @Composable
-        fun view() {
+        fun View() {
             var name by remember { mutableStateOf(TextFieldValue("")) }
             var phone by remember { mutableStateOf(TextFieldValue("")) }
             var email by remember { mutableStateOf(TextFieldValue("")) }

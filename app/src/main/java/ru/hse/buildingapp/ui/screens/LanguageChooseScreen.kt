@@ -1,4 +1,4 @@
-package ru.hse.buildingapp
+package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -15,10 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.hse.buildingapp.R
+import ru.hse.buildingapp.robotoFamily
 
 class LanguageChooseScreen private constructor() {
     @Composable
-    fun view()
+    fun View()
     {
         Box {
             Column( modifier =

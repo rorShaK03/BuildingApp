@@ -1,4 +1,4 @@
-package ru.hse.buildingapp
+package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -22,14 +22,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.hse.buildingapp.R
+import ru.hse.buildingapp.robotoFamily
 
 class HomeScreen private constructor() {
     companion object {
         @Composable
-        fun view(onSubmitClick: () -> Unit)
+        fun View(onSubmitClick: () -> Unit)
         {
             var title by rememberSaveable{ mutableStateOf("Architectural Designs") }
-            var images by rememberSaveable{ mutableStateOf(listOf(R.drawable.house1, R.drawable.house2, R.drawable.house3, R.drawable.house4, R.drawable.house5, R.drawable.house6)) }
+            var images by rememberSaveable{ mutableStateOf(listOf(
+                R.drawable.house1,
+                R.drawable.house2,
+                R.drawable.house3,
+                R.drawable.house4,
+                R.drawable.house5,
+                R.drawable.house6
+            )) }
             Column {
                 Text(
                     text = "Our Services",
@@ -135,28 +144,36 @@ class HomeScreen private constructor() {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly) {
                 if(active == 0)
-                    LabeledSectionButton(R.drawable.architectural_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Architectural\n" +
+                    LabeledSectionButton(
+                        R.drawable.architectural_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Architectural\n" +
                             "Designs", onClick = {active = 0; onClick(active)}, modifier = Modifier.width(75.dp))
                 else
-                    LabeledSectionButton(R.drawable.architectural_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Architectural\n" +
+                    LabeledSectionButton(
+                        R.drawable.architectural_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Architectural\n" +
                             "Designs", onClick = {active = 0; onClick(active)}, modifier = Modifier.width(75.dp))
                 if(active == 1)
-                    LabeledSectionButton(R.drawable.interior_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Interior\n" +
+                    LabeledSectionButton(
+                        R.drawable.interior_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Interior\n" +
                             "Designs", onClick = {active = 1; onClick(active)}, modifier = Modifier.width(75.dp))
                 else
-                    LabeledSectionButton(R.drawable.interior_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Interior\n" +
+                    LabeledSectionButton(
+                        R.drawable.interior_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Interior\n" +
                             "Designs", onClick = {active = 1; onClick(active)}, modifier = Modifier.width(75.dp))
                 if(active == 2)
-                    LabeledSectionButton(R.drawable.consultings_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Consultings\n" +
+                    LabeledSectionButton(
+                        R.drawable.consultings_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Consultings\n" +
                             "Engineering", onClick = {active = 2; onClick(active)}, modifier = Modifier.width(75.dp))
                 else
-                    LabeledSectionButton(R.drawable.consultings_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Consultings\n" +
+                    LabeledSectionButton(
+                        R.drawable.consultings_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Consultings\n" +
                             "Engineering", onClick = {active = 2; onClick(active)}, modifier = Modifier.width(75.dp))
                 if(active == 3)
-                    LabeledSectionButton(R.drawable.estate_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Real estate\n" +
+                    LabeledSectionButton(
+                        R.drawable.estate_icon_selected, Color(0xFF3C6AB0), Color(0xFF2D4855), "Real estate\n" +
                             "consulting", onClick = {active = 3; onClick(active)}, modifier = Modifier.width(75.dp))
                 else
-                    LabeledSectionButton(R.drawable.estate_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Real estate\n" +
+                    LabeledSectionButton(
+                        R.drawable.estate_icon_unselected, Color(0xFFEDEDED), Color(0xFF848484), "Real estate\n" +
                             "consulting", onClick = {active = 3; onClick(active)}, modifier = Modifier.width(75.dp))
             }
         }
