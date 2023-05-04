@@ -1,12 +1,8 @@
 package ru.hse.buildingapp.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -22,13 +18,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import ru.hse.buildingapp.MainActivity
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
 class HomeScreen private constructor() {
     companion object {
         @Composable
-        fun View(onSubmitClick: () -> Unit)
+        fun View(navController: NavHostController,
+                 viewModel : HomeViewModel = viewModel()
+        )
         {
             var title by rememberSaveable{ mutableStateOf("Architectural Designs") }
             var images by rememberSaveable{ mutableStateOf(listOf(
@@ -52,20 +52,21 @@ class HomeScreen private constructor() {
                 SectionButtonsRow(onClick = {
                     when(it) {
                         0 -> {title = "Architectural Designs"
-                            images = listOf(R.drawable.house1, R.drawable.house2, R.drawable.house3, R.drawable.house4, R.drawable.house5, R.drawable.house6)}
+                            images = viewModel.architecturalImgIds }
                         1 -> {title = "Interior Design"
-                            images = listOf(R.drawable.interior1, R.drawable.interior2, R.drawable.interior3, R.drawable.interior4, R.drawable.interior5, R.drawable.interior6)}
+                            images = viewModel.interiorImgIds}
                         2 -> {title = "Consultings Engineering"
-                            images = listOf(R.drawable.consultings1, R.drawable.consultings2, R.drawable.consultings3, R.drawable.consultings4, R.drawable.consultings5, R.drawable.consultings6)}
+                            images = viewModel.consultingImgIds}
                         3 -> {title = "Real estate Consulting"
-                            images = listOf(R.drawable.real_estate1, R.drawable.real_estate2, R.drawable.real_estate3, R.drawable.real_estate4, R.drawable.real_estate5, R.drawable.real_estate6)}
+                            images = viewModel.realEstateImgIds}
                     }
                 })
                 Spacer(Modifier.height(14.dp))
                 Column(
                     Modifier
                         .background(Color(0xFFEDEDED), shape = RoundedCornerShape(20.dp))
-                        .fillMaxWidth()) {
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())) {
                     Text(
                         text = title,
                         textAlign = TextAlign.Left,
@@ -93,7 +94,12 @@ class HomeScreen private constructor() {
                             .fillMaxWidth()
                             .padding(20.dp), horizontalArrangement = Arrangement.Center) {
                         Button(
-                            onClick = onSubmitClick,
+                            onClick = {
+                                navController.navigate(MainActivity.Screen.ProjectRequest.route) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
                             Modifier
                                 .width(145.dp)
                                 .height(40.dp),
@@ -113,9 +119,44 @@ class HomeScreen private constructor() {
         }
 
 
-        @OptIn(ExperimentalFoundationApi::class)
+//        @OptIn(ExperimentalFoundationApi::class)
         @Composable
         fun ImageColumn(imageIds: List<Int>) {
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center) {
+                Column() {
+                    for(i in 0 until imageIds.size / 2) {
+                        val id = imageIds[i]
+                        Image(
+                            painter = painterResource(id),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .clip(RoundedCornerShape(20))
+                                .size(width = 125.dp, height = 200.dp)
+                        )
+                    }
+                }
+                Spacer(Modifier.width(20.dp))
+                Column() {
+                    for(i in imageIds.size / 2 until imageIds.size) {
+                        val id = imageIds[i]
+                        Image(
+                            painter = painterResource(id),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .clip(RoundedCornerShape(20))
+                                .size(width = 125.dp, height = 200.dp)
+                        )
+                    }
+                }
+            }
+            /*
             LazyVerticalGrid(cells = GridCells.Fixed(2),
                 Modifier
                     .fillMaxWidth()
@@ -132,6 +173,7 @@ class HomeScreen private constructor() {
                 )
                 }
             }
+            */
         }
 
         @Composable

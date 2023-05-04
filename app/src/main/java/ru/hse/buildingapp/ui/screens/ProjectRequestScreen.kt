@@ -1,12 +1,9 @@
 package ru.hse.buildingapp.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -168,7 +165,9 @@ class ProjectRequestScreen private constructor() {
             onValueChanged: (TextFieldValue) -> Unit
         ) {
             Row(
-                Modifier.padding(start = 15.dp),
+                Modifier
+                    .padding(start = 15.dp)
+                    .padding(top = 12.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             )
@@ -178,22 +177,37 @@ class ProjectRequestScreen private constructor() {
                     Modifier.size(15.dp)
                 )
                 Spacer(Modifier.width(13.dp))
-                Text(
-                    text = label,
-                    textAlign = TextAlign.Left,
-                    fontFamily = robotoFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    color = Color(0xFFBBBBBB),
-                    modifier = Modifier
-                        .padding(top = 12.dp, bottom = 16.dp)
-                        .width(50.dp)
-                )
-                Spacer(Modifier.width(20.dp))
                 BasicTextField(
-                    modifier = Modifier.size(width = 224.dp, height = 30.dp),
+                    modifier = Modifier
+                        .size(width = 224.dp, height = 30.dp),
                     value = value,
-                    onValueChange = { onValueChanged(it) }
+                    onValueChange = { onValueChanged(it) },
+                    decorationBox = {innerTextField ->
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFFD1E2E1),
+                                shape = RoundedCornerShape(size = 6.dp)
+                            )
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        ) {
+                            if(value.text.isEmpty()) {
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .align(Alignment.BottomStart),
+                                    text = label,
+                                    fontSize = 10.sp,
+                                    fontFamily = robotoFamily,
+                                    fontWeight = FontWeight.Light,
+                                    color = Color(0xFF9F9F9F),
+
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
                 )
             }
         }

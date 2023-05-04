@@ -1,23 +1,27 @@
 package ru.hse.buildingapp.ui.screens
 
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.hse.buildingapp.network.BackendApi
+import ru.hse.buildingapp.network.models.NewsModel
+import ru.hse.buildingapp.repository.NewsRepository
 import java.io.IOException
 
 class NewsViewModel : ViewModel() {
 
+    /*
     sealed interface NewsUiState {
-        data class Success(val news : String) : NewsUiState
+        data class Success(val news : List<NewsModel>) : NewsUiState
         object Loading : NewsUiState
         object Error : NewsUiState
     }
+    */
 
-    var newsUiState : NewsUiState by mutableStateOf(NewsUiState.Loading)
+    var newsUiState : List<NewsModel> by mutableStateOf(listOf())
         private set
 
     init {
@@ -27,11 +31,11 @@ class NewsViewModel : ViewModel() {
     private fun getNews() {
         viewModelScope.launch {
             newsUiState = try {
-                val listResults = BackendApi.retrofitService.getNews()
-                NewsUiState.Success(listResults)
+                NewsRepository.updateData()
+                NewsRepository.news.values.toList()
             }
-            catch(_ : IOException) {
-                NewsUiState.Error
+            catch(e : IOException) {
+                throw e
             }
         }
     }

@@ -13,18 +13,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
 class NewsScreen private constructor() {
     companion object {
         @Composable
-        fun View() {
+        fun View(
+            viewModel : NewsViewModel = viewModel()
+        ) {
             Column(
                 Modifier
                     .fillMaxHeight()
                     .background(color = Color(0xFFF0F0F0), RoundedCornerShape(20.dp))
                     .padding(start = 20.dp, end = 20.dp, top = 16.dp)) {
+                /*
                 NewsCard(title = "Palisades Development Company",
                         text = "Palisades Development Company LLC was incorporated in 2015 to market, manage, lease, buy and sell land in The Palisades ... ",
                         imageId = R.drawable.news_pdc, date = "Oct - 2019")
@@ -36,6 +40,16 @@ class NewsScreen private constructor() {
                 NewsCard(title = " Dubai Cranes and Technical Services LTD",
                     text = "Dubai Cranes & Technical Services Ltd., established in 2006, is one of the top manufacturers of ...",
                     imageId = R.drawable.news_dcts, date = "Oct - 2019")
+                Spacer(Modifier.height(20.dp))
+                 */
+                for(news in viewModel.newsUiState) {
+                    NewsCard(
+                        title = "Test title",
+                        text = news.text,
+                        imageId = R.drawable.news_dcts, date = "Oct - 2019"
+                    )
+                    Spacer(Modifier.height(20.dp))
+                }
             }
         }
 

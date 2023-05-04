@@ -5,4 +5,5 @@
     <string name="news">News</string>
     <string name="about_us">About us</string>
     <string name="project_request">New project request</string>
+    <string name="login">Log in</string>
 </resources>

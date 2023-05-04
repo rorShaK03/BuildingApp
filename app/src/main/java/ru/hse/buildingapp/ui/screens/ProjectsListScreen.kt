@@ -2,6 +2,7 @@ package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
@@ -9,24 +10,26 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.hse.buildingapp.R
+import ru.hse.buildingapp.network.models.ProjectStatus
 import ru.hse.buildingapp.robotoFamily
 
-class ProjectsScreen private constructor() {
-    companion object {
-
-        enum class ProjectStatus {
-            PREPARING, ON_PROGRESS, DONE
-        }
+object ProjectsListScreen {
 
         @Composable
-        fun View() {
+        fun View(navController: NavHostController,
+                 viewModel: ProjectsListViewModel = viewModel()) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -37,9 +40,9 @@ class ProjectsScreen private constructor() {
                         .fillMaxWidth()
                         .padding(top = 16.dp, bottom = 25.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly) {
-                    LabeledStatusBar(label = "Preparing", progress = 0.25f)
-                    LabeledStatusBar(label = "On progress", progress = 0.5f)
-                    LabeledStatusBar(label = "Done", progress = 0.75f)
+                    LabeledStatusBar(label = "Preparing", progress = viewModel.preparingFraction)
+                    LabeledStatusBar(label = "On progress", progress = viewModel.onProgressFraction)
+                    LabeledStatusBar(label = "Done", progress = viewModel.doneFraction)
                 }
                 Column(
                     Modifier
@@ -49,17 +52,21 @@ class ProjectsScreen private constructor() {
                             RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                         )
                         .padding(top = 30.dp)) {
-                    ProjectCard(title = "Modification of al Ruwaiyyah Dining \n" +
-                            "4th Floor Evp Offices", imageId = R.drawable.projects_screen_lifting_crane_icon, status = ProjectStatus.PREPARING
-                    )
-                    Divider()
-                    Spacer(Modifier.height(20.dp))
-                    ProjectCard(title = "Building a model school with a\n" +
-                            "capacity of 500 students", imageId = R.drawable.projects_screen_house_icon, status = ProjectStatus.DONE
-                    )
-                    Divider()
-                    Spacer(Modifier.height(20.dp))
-                    ProjectCard(title = "Solid waste removal station", imageId = R.drawable.projects_screen_lifting_crane_icon, status = ProjectStatus.ON_PROGRESS)
+                    for(project in viewModel.projects) {
+                        ProjectCard(
+                            title = project.projectName,
+                            imageId = R.drawable.projects_screen_lifting_crane_icon,
+                            status = project.status
+                            ) {
+                                navController.navigate("project/${project.id}") {
+                                    launchSingleTop = true
+                                    restoreState = true
+
+                            }
+                            }
+                        Divider()
+                        Spacer(Modifier.height(20.dp))
+                    }
                 }
             }
         }
@@ -67,6 +74,14 @@ class ProjectsScreen private constructor() {
         @Composable
         fun LabeledStatusBar(label: String, progress: Float) {
             Column() {
+                Text(text = "${(progress * 100).toInt()}%",
+                    textAlign = TextAlign.Left,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    color = Color(0xFFFFFFFF),
+                    modifier = Modifier.padding(bottom = 7.dp)
+                )
                 CircularProgressIndicator(progress = progress,
                 color = Color(0xFFFFFFFF))
                 Spacer(Modifier.height(10.dp))
@@ -81,11 +96,16 @@ class ProjectsScreen private constructor() {
         }
 
         @Composable
-        fun ProjectCard(title: String, imageId: Int, status: ProjectStatus) {
+        fun ProjectCard(title: String,
+                        imageId: Int,
+                        status: ProjectStatus,
+                        onClick: () -> Unit
+        ) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
+                    .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                    .clickable { onClick() },
                 horizontalArrangement = Arrangement.SpaceEvenly) {
                 Column(Modifier.fillMaxWidth(0.8f)) {
                     Text(text = title,
@@ -113,5 +133,4 @@ class ProjectsScreen private constructor() {
                 contentDescription = null)
             }
         }
-    }
 }
