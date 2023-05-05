@@ -20,16 +20,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.hse.buildingapp.R
 import ru.hse.buildingapp.network.models.ProjectStatus
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.ProjectsListViewModel
 
 object ProjectsListScreen {
 
         @Composable
         fun View(navController: NavHostController,
                  viewModel: ProjectsListViewModel = viewModel()) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -55,7 +54,7 @@ object ProjectsListScreen {
                     for(project in viewModel.projects) {
                         ProjectCard(
                             title = project.projectName,
-                            imageId = R.drawable.projects_screen_lifting_crane_icon,
+                            imageId = project.iconId,
                             status = project.status
                             ) {
                                 navController.navigate("project/${project.id}") {

@@ -1,4 +1,4 @@
-package ru.hse.buildingapp.ui.screens
+package ru.hse.buildingapp.ui.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

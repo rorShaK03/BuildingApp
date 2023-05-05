@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
-class LanguageChooseScreen private constructor() {
+object LanguageChooseScreen {
     @Composable
     fun View()
     {

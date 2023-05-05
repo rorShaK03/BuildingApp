@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
-class LogoScreen private constructor() {
-    companion object {
+object LogoScreen {
         @Composable
         fun View() {
             Box {
@@ -50,5 +49,4 @@ class LogoScreen private constructor() {
                 }
             }
         }
-    }
 }

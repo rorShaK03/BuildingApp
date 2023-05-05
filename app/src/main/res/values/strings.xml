@@ -6,4 +6,6 @@
     <string name="about_us">About us</string>
     <string name="project_request">New project request</string>
     <string name="login">Log in</string>
+    <string name="booking">Booking</string>
+    <string name="our_team">Our Team</string>
 </resources>

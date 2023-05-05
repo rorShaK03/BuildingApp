@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
-class ProjectRequestScreen private constructor() {
-    companion object {
+object ProjectRequestScreen {
         @Composable
         fun View() {
             var name by remember { mutableStateOf(TextFieldValue("")) }
@@ -211,5 +210,4 @@ class ProjectRequestScreen private constructor() {
                 )
             }
         }
-    }
 }

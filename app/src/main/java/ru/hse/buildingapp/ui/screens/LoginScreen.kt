@@ -25,9 +25,7 @@ import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
-class LoginScreen {
-
-    companion object {
+object LoginScreen {
         @Composable
         fun View() {
             var email by remember { mutableStateOf(TextFieldValue("")) }
@@ -131,5 +129,4 @@ class LoginScreen {
                 )
             }
         }
-    }
 }

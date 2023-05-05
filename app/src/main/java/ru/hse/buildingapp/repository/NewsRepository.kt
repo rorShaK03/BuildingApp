@@ -10,7 +10,7 @@ object NewsRepository {
 
     suspend fun updateData() {
         val newsList : List<NewsModel> = try {
-            val listResults = BackendApi.retrofitService.getNews(0, 1)
+            val listResults = BackendApi.retrofitService.getNews(0, 10)
             listResults
         }
         catch(e : IOException) {

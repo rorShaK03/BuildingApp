@@ -22,9 +22,9 @@ import androidx.navigation.NavHostController
 import ru.hse.buildingapp.MainActivity
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.HomeViewModel
 
-class HomeScreen private constructor() {
-    companion object {
+object HomeScreen {
         @Composable
         fun View(navController: NavHostController,
                  viewModel : HomeViewModel = viewModel()
@@ -251,5 +251,4 @@ class HomeScreen private constructor() {
                     contentDescription = "")
             }
         }
-    }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.ProjectViewModel
 
 object ProjectScreen {
         @Composable
@@ -88,7 +89,9 @@ object ProjectScreen {
         @Composable
         private fun Property(name : String, value : String) {
             Row(modifier = Modifier
-                .padding(start = 18.dp, top = 12.dp)) {
+                .padding(start = 18.dp, end = 18.dp, top = 12.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(modifier = Modifier
                     .width(120.dp),
                     text = name,
@@ -97,8 +100,9 @@ object ProjectScreen {
                     fontWeight = FontWeight.W600,
                     fontSize = 16.sp,
                     color = Color(0xFF888888))
-                Spacer(Modifier.width(140.dp))
-                Text(text = value,
+                Text(modifier = Modifier
+                    .width(150.dp),
+                    text = value,
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,

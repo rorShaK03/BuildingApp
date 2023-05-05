@@ -9,9 +9,10 @@ enum class ProjectStatus {
 
 @Serializable
 data class ProjectModel(val id : Int,
-                   val projectName : String,
-                   val area : Int,
-                   val budget : Int,
-                   val address : String,
-                   val status : ProjectStatus = ProjectStatus.ON_PROGRESS,
-                   val projectImageId: Int = R.drawable.project_img_sample){}
+                        val projectName : String,
+                        val area : Int,
+                        val budget : Int,
+                        val address : String,
+                        val status : ProjectStatus = ProjectStatus.ON_PROGRESS,
+                        val projectImageId: Int = R.drawable.project_img_sample,
+                        val iconId: Int = R.drawable.projects_screen_house_icon){}

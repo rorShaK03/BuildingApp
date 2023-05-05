@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.hse.buildingapp.network.models.NewsModel
 
-private const val BASE_URL = "https://10.0.2.2:5001"
+private const val BASE_URL = "https://192.168.1.68:5001"
 private val json = Json { ignoreUnknownKeys = true }
 
 @OptIn(ExperimentalSerializationApi::class)

@@ -14,11 +14,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.NewsViewModel
 
-class NewsScreen private constructor() {
-    companion object {
+object NewsScreen {
         @Composable
         fun View(
             viewModel : NewsViewModel = viewModel()
@@ -44,9 +43,10 @@ class NewsScreen private constructor() {
                  */
                 for(news in viewModel.newsUiState) {
                     NewsCard(
-                        title = "Test title",
+                        title = news.title,
                         text = news.text,
-                        imageId = R.drawable.news_dcts, date = "Oct - 2019"
+                        imageId = news.iconId,
+                        date = news.date
                     )
                     Spacer(Modifier.height(20.dp))
                 }
@@ -91,5 +91,4 @@ class NewsScreen private constructor() {
                 }
             }
         }
-    }
 }

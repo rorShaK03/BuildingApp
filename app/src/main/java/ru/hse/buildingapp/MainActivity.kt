@@ -37,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.hse.buildingapp.ui.screens.*
 import ru.hse.buildingapp.ui.theme.BuildingAppTheme
+import ru.hse.buildingapp.ui.viewmodels.ProjectViewModel
 
 var robotoFamily = FontFamily(
     Font(R.font.roboto_light, FontWeight.Light),
@@ -265,7 +266,7 @@ class MainActivity : ComponentActivity() {
         { innerPadding ->
             NavHost(
                 navController,
-                startDestination = Screen.Home.route,
+                startDestination = Screen.AboutUs.route,
                 Modifier.padding(innerPadding)
             ) {
                 composable(Screen.Home.route) {
@@ -295,6 +296,10 @@ class MainActivity : ComponentActivity() {
                     title = stringResource(id = Screen.Project.labelId!!)
                     val arg : String = backStackEntry.arguments?.getString("id") ?: throw NullPointerException()
                     ProjectScreen.View(ProjectViewModel(Integer.parseInt(arg)))
+                }
+                composable(Screen.AboutUs.route) {
+                    title = stringResource(id = Screen.AboutUs.labelId!!)
+                    AboutUsScreen.View()
                 }
             }
         }
