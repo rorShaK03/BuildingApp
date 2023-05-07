@@ -15,16 +15,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 
 object LanguageChooseScreen {
     @Composable
-    fun View()
+    fun View(navController: NavHostController)
     {
         Box {
             Column( modifier =
-            Modifier.align(Alignment.Center),
+            Modifier.fillMaxSize()
+                .padding(top = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "Royal Palace",
@@ -52,7 +55,10 @@ object LanguageChooseScreen {
                 )
                 Spacer(Modifier.height(33.dp))
                 Button(
-                    onClick = {},
+                    onClick = {navController.navigate("main-app") {
+                        popUpTo(navController.graph.findStartDestination().id) {inclusive = true}
+                        launchSingleTop = true
+                    } },
                     Modifier
                         .width(230.dp)
                         .height(50.dp),
@@ -68,6 +74,7 @@ object LanguageChooseScreen {
                         fontSize = 18.sp,
                         color = Color.White)
                 }
+                /*
                 Spacer(Modifier.height(23.dp))
                 Button(
                     onClick = {},
@@ -86,6 +93,7 @@ object LanguageChooseScreen {
                         fontSize = 18.sp,
                         color = Color.White)
                 }
+                 */
             }
         }
     }

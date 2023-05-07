@@ -1,5 +1,6 @@
 package ru.hse.buildingapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,10 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.LoginViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import ru.hse.buildingapp.navigation.NavigationAdapter
+import ru.hse.buildingapp.network.authmodels.AuthRespState
 
 object LoginScreen {
         @Composable
-        fun View() {
+        fun View(viewModel: LoginViewModel) {
             var email by remember { mutableStateOf(TextFieldValue("")) }
             var password by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -68,7 +74,7 @@ object LoginScreen {
 
                 Spacer(Modifier.height(30.dp))
                 Button(
-                    onClick = { },
+                    onClick = {viewModel.submit(email.text, password.text) },
                     Modifier
                         .width(145.dp)
                         .wrapContentHeight()
@@ -83,6 +89,45 @@ object LoginScreen {
                         fontWeight = FontWeight.Medium,
                         fontSize = 12.sp,
                         color = Color(0xFFFFFFFF),
+                    )
+                }
+                Spacer(Modifier.height(30.dp))
+                val state = viewModel.state
+                if(state is AuthRespState.Success) {
+                    Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
+                    viewModel.navController.navigate(NavigationAdapter.Screen.Projects.route) {
+                        popUpTo(viewModel.navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
+                }
+                else if(state is AuthRespState.InvalidCredentials) {
+                    Text(
+                        text = "Invalid login or password. Try again!",
+                        textAlign = TextAlign.Left,
+                        fontFamily = robotoFamily,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        color = Color(0xFFF70707),
+                    )
+                }
+                else if(state is AuthRespState.UnknownServerError) {
+                    Text(
+                        text = "Unknown server error. Error code ${state.code}.",
+                        textAlign = TextAlign.Left,
+                        fontFamily = robotoFamily,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        color = Color(0xFFF70707),
+                    )
+                }
+                else if(state is AuthRespState.ConnectionError) {
+                    Text(
+                        text = "Server is unavailable. Please, check, your internet connection",
+                        textAlign = TextAlign.Left,
+                        fontFamily = robotoFamily,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        color = Color(0xFFF70707),
                     )
                 }
             }

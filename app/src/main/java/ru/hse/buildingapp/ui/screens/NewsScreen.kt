@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.NewsViewModel
 
@@ -24,7 +26,7 @@ object NewsScreen {
         ) {
             Column(
                 Modifier
-                    .fillMaxHeight()
+                    .fillMaxSize()
                     .background(color = Color(0xFFF0F0F0), RoundedCornerShape(20.dp))
                     .padding(start = 20.dp, end = 20.dp, top = 16.dp)) {
                 /*
@@ -41,14 +43,43 @@ object NewsScreen {
                     imageId = R.drawable.news_dcts, date = "Oct - 2019")
                 Spacer(Modifier.height(20.dp))
                  */
-                for(news in viewModel.newsUiState) {
-                    NewsCard(
-                        title = news.title,
-                        text = news.text,
-                        imageId = news.iconId,
-                        date = news.date
-                    )
-                    Spacer(Modifier.height(20.dp))
+                val state = viewModel.newsUiState
+                if(state is RespState.Success) {
+                    for (news in state.res.values) {
+                        NewsCard(
+                            title = news.title,
+                            text = news.text,
+                            imageId = news.iconId,
+                            date = news.date
+                        )
+                        Spacer(Modifier.height(20.dp))
+                    }
+                }
+                else if(state is RespState.UnknownError) {
+                    Row(Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Unknown server error. Error code ${state.code}.",
+                            textAlign = TextAlign.Left,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = Color(0xFFF70707),
+                        )
+                    }
+                }
+                else if(state is RespState.ConnectionError) {
+                    Row(Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Server is unavailable. Please, check, your internet connection",
+                            textAlign = TextAlign.Left,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = Color(0xFFF70707),
+                        )
+                    }
                 }
             }
         }

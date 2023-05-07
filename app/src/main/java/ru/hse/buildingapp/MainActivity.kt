@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -35,9 +34,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.hse.buildingapp.navigation.NavigationAdapter
 import ru.hse.buildingapp.ui.screens.*
 import ru.hse.buildingapp.ui.theme.BuildingAppTheme
-import ru.hse.buildingapp.ui.viewmodels.ProjectViewModel
+import ru.hse.buildingapp.ui.viewmodels.*
 
 var robotoFamily = FontFamily(
     Font(R.font.roboto_light, FontWeight.Light),
@@ -62,55 +62,37 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
-                ) {
-                    Content()
+                )
+                {
+                    val helperNavController : NavHostController = rememberNavController()
+                    NavHost(navController = helperNavController,
+                            startDestination = NavigationAdapter.Screen.LanguageChoose.route) {
+                        composable("lang-choose") {
+                            LanguageChooseScreen.View(helperNavController)
+                        }
+                        composable("main-app") {
+                            Content()
+                        }
+                    }
                 }
             }
         }
     }
 
-    sealed class Screen(val route: String,
-                        @StringRes val labelId: Int?,
-                        @DrawableRes val darkIconId: Int? = null,
-                        @DrawableRes val lightIconId : Int? = null) {
-        object Home : Screen("home", R.string.home, R.drawable.home_icon)
-        object Projects : Screen("projects",
-            R.string.projects,
-            R.drawable.projects_icon_dark,
-            R.drawable.projects_icon_light)
-        object Project : Screen("project/{id}",
-        R.string.projects,
-        null,
-        null)
-        object News : Screen("news",
-            R.string.news,
-            R.drawable.news_icon)
-        object AboutUs : Screen("aboutus",
-            R.string.about_us,
-            R.drawable.about_us_icon_dark,
-            R.drawable.about_us_icon_light)
-        object ProjectRequest: Screen("projectrequest",
-            R.string.project_request)
-        object Login: Screen("login",
-            R.string.login,
-            null,
-            R.drawable.login_icon_light)
-    }
-
     val bottomNavItems = listOf(
-        Screen.Home,
-        Screen.Projects,
-        Screen.News,
-        Screen.AboutUs
+        NavigationAdapter.Screen.Home,
+        NavigationAdapter.Screen.Projects,
+        NavigationAdapter.Screen.News,
+        NavigationAdapter.Screen.AboutUs
     )
     val leftNavItems = listOf(
-        Screen.Projects,
-        Screen.AboutUs,
-        Screen.Login
+        NavigationAdapter.Screen.Projects,
+        NavigationAdapter.Screen.AboutUs,
+        NavigationAdapter.Screen.Login
     )
 
     @Composable
-    fun LeftNavItem(s : Screen, selected : Boolean, onClick : () -> Unit) {
+    fun LeftNavItem(s : NavigationAdapter.Screen, selected : Boolean, onClick : () -> Unit) {
         val backgroundColor = if(!selected) Color(0xFF3C6AB0) else Color(0xFF30548A)
         Row(Modifier
             .padding(end = 1.dp)
@@ -165,11 +147,9 @@ class MainActivity : ComponentActivity() {
                     {
                         Spacer(Modifier.height(25.dp))
                         leftNavItems.forEach() { item ->
-                            LeftNavItem(item, selected = currentDestination?.hierarchy?.any { it.route == item.route } == true) {
+                            LeftNavItem(item, selected = currentDestination?.hierarchy?.any { it.route?.contains(item.route) == true } == true) {
                                 navController.navigate(item.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+                                    popUpTo(navController.graph.findStartDestination().id)
                                     launchSingleTop = true
 
                                 }
@@ -238,12 +218,10 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 label = { Text(stringResource(item.labelId!!)) },
-                                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                                selected = currentDestination?.hierarchy?.any { it.route?.contains(item.route) == true} == true,
                                 onClick = {
                                     navController.navigate(item.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
+                                        popUpTo(navController.graph.findStartDestination().id)
                                         launchSingleTop = true
 
                                     }
@@ -266,39 +244,41 @@ class MainActivity : ComponentActivity() {
         { innerPadding ->
             NavHost(
                 navController,
-                startDestination = Screen.AboutUs.route,
+                startDestination = NavigationAdapter.Screen.Home.route,
                 Modifier.padding(innerPadding)
             ) {
-                composable(Screen.Home.route) {
-                    title = stringResource(id = Screen.Home.labelId!!)
-                    HomeScreen.View(navController)
+                composable(NavigationAdapter.Screen.Home.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.Home.labelId!!)
+                    HomeScreen.View(viewModel(factory = HomeViewModelFactory(navController)))
                 }
-                composable(Screen.Projects.route) {
-                    title = stringResource(id = Screen.Projects.labelId!!)
-                    ProjectsListScreen.View(navController)
+                composable(NavigationAdapter.Screen.Projects.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.Projects.labelId!!)
+                    ProjectsListScreen.View(viewModel(factory = ProjectsListViewModelFactory(navController)))
                 }
-                composable(Screen.News.route) {
-                    title = stringResource(id = Screen.News.labelId!!)
+                composable(NavigationAdapter.Screen.News.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.News.labelId!!)
                     NewsScreen.View()
                 }
-                composable(Screen.AboutUs.route) {
-                    title = stringResource(id = Screen.AboutUs.labelId!!)
-                }
-                composable(Screen.ProjectRequest.route) {
-                    title = stringResource(id = Screen.ProjectRequest.labelId!!)
+                composable(NavigationAdapter.Screen.ProjectRequest.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.ProjectRequest.labelId!!)
                     ProjectRequestScreen.View()
                 }
-                composable(Screen.Login.route) {
-                    title = stringResource(id = Screen.Login.labelId!!)
-                    LoginScreen.View()
+                composable(NavigationAdapter.Screen.Login.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.Login.labelId!!)
+                    LoginScreen.View(viewModel(factory = LoginViewModelFactory(navController)))
                 }
-                composable(Screen.Project.route) { backStackEntry ->
-                    title = stringResource(id = Screen.Project.labelId!!)
+                composable(NavigationAdapter.Screen.Project.route) { backStackEntry ->
+                    title = stringResource(id = NavigationAdapter.Screen.Project.labelId!!)
                     val arg : String = backStackEntry.arguments?.getString("id") ?: throw NullPointerException()
-                    ProjectScreen.View(ProjectViewModel(Integer.parseInt(arg)))
+                    ProjectScreen.View(viewModel(factory = ProjectViewModelFactory(Integer.parseInt(arg), navController)))
                 }
-                composable(Screen.AboutUs.route) {
-                    title = stringResource(id = Screen.AboutUs.labelId!!)
+                composable(NavigationAdapter.Screen.Reports.route) { backStackEntry ->
+                    title = stringResource(id = NavigationAdapter.Screen.Reports.labelId!!)
+                    val arg : String = backStackEntry.arguments?.getString("id") ?: throw NullPointerException()
+                    ReportsScreen.View(viewModel(factory = ReportsViewModelFactory(Integer.parseInt(arg))))
+                }
+                composable(NavigationAdapter.Screen.AboutUs.route) {
+                    title = stringResource(id = NavigationAdapter.Screen.AboutUs.labelId!!)
                     AboutUsScreen.View()
                 }
             }

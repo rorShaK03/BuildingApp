@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -17,14 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.hse.buildingapp.navigation.NavigationAdapter
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.ProjectViewModel
 
 object ProjectScreen {
         @Composable
         fun View(
-            viewModel : ProjectViewModel = viewModel()
+            viewModel : ProjectViewModel
         ) {
                 Column(
                     modifier = Modifier
@@ -61,10 +64,13 @@ object ProjectScreen {
                             fontSize = 18.sp,
                             color = Color(0xFF3C6AB0)
                         )
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            Property(name = "Address", value = viewModel.project.address)
+                        Column(modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .height(130.dp)) {
+                            Property(name = "Adress", value = viewModel.project.address)
                             Property(name = "Area", value = viewModel.project.area.toString())
                             Property(name = "Budget", value = viewModel.project.budget.toString())
+                            Property(name = "Status", value = viewModel.project.projStatus.text)
                             /*
                             Property(name = "Due Date", value = viewModel.dueDate)
                             Property(name = "Location", value = viewModel.location)
@@ -79,7 +85,35 @@ object ProjectScreen {
                             )
                             Property(name = "Drawing Number", value = viewModel.drawingNumber)
                             */
-                            Spacer(Modifier.height(10.dp))
+                        }
+                        Column(modifier = Modifier
+                            .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally) {
+                            Button(
+                                onClick = {
+                                    viewModel.navController.navigate(NavigationAdapter.Screen.Reports.createRoute(viewModel.project.id)) {
+
+                                }},
+                                modifier = Modifier
+                                    .width(150.dp)
+                                    .height(80.dp)
+                                    .padding(top = 40.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(
+                                        0xFF3C6AB0
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ) {
+                                Text(
+                                    text = "Reports",
+                                    textAlign = TextAlign.Left,
+                                    fontFamily = robotoFamily,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 12.sp,
+                                    color = Color(0xFFFFFFFF)
+                                )
+                            }
                         }
                     }
                 }

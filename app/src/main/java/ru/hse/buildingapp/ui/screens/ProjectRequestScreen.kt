@@ -178,7 +178,7 @@ object ProjectRequestScreen {
                 Spacer(Modifier.width(13.dp))
                 BasicTextField(
                     modifier = Modifier
-                        .size(width = 224.dp, height = 30.dp),
+                        .size(width = 270.dp, height = 35.dp),
                     value = value,
                     onValueChange = { onValueChanged(it) },
                     decorationBox = {innerTextField ->
@@ -197,7 +197,7 @@ object ProjectRequestScreen {
                                         .fillMaxSize()
                                         .align(Alignment.BottomStart),
                                     text = label,
-                                    fontSize = 10.sp,
+                                    fontSize = 12.sp,
                                     fontFamily = robotoFamily,
                                     fontWeight = FontWeight.Light,
                                     color = Color(0xFF9F9F9F),

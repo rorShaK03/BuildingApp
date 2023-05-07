@@ -54,7 +54,7 @@ object AboutUsScreen {
         Image(
             modifier = Modifier
                 .padding(start = 10.dp, top = 20.dp)
-                .width(146.dp),
+                .width(170.dp),
             painter = painterResource(id = R.drawable.nav_drawer_logo),
             contentScale = ContentScale.Crop,
             contentDescription = null

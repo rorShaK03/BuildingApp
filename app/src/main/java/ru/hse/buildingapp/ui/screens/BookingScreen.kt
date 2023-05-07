@@ -97,7 +97,7 @@ object BookingScreen {
     private fun TimePicker(viewModel: BookingViewModel) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(180.dp)
             .background(Color(0xFFFFFFFF), RoundedCornerShape(7))
             .border(1.dp, Color(0xFF3C6AB0), RoundedCornerShape(7))) {
             Text(modifier = Modifier
@@ -125,7 +125,7 @@ object BookingScreen {
     private fun TimeVariant(hour : Int, isAvailable : Boolean, viewModel: BookingViewModel) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(37.dp)
             .clickable { viewModel.setSelectedHour(hour) }
             .background(
                 if (viewModel.selected.get(Calendar.HOUR_OF_DAY) == hour)
@@ -139,13 +139,13 @@ object BookingScreen {
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(
                     modifier = Modifier
-                        .width(60.dp),
+                        .width(70.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         modifier = Modifier
                             .width(40.dp),
-                        text = if (hour <= 12) "${hour.toString()}:00" else "${(hour - 12).toString()}:00",
+                        text = if (hour <= 12) "${hour}:00" else "${(hour - 12)}:00",
                         textAlign = TextAlign.Left,
                         fontFamily = robotoFamily,
                         fontWeight = FontWeight.W500,
@@ -154,7 +154,7 @@ object BookingScreen {
                     )
                     Text(
                         modifier = Modifier
-                            .width(30.dp),
+                            .width(40.dp),
                         text = if (hour < 12) "am" else "pm",
                         textAlign = TextAlign.Left,
                         fontFamily = robotoFamily,
@@ -231,29 +231,34 @@ object BookingScreen {
                     date.get(Calendar.DAY_OF_MONTH) == viewModel.selected.get(Calendar.DAY_OF_MONTH))
                     Color(0xFF3C6AB0)
                 else
-                    Color(0x00FFFFFF)
+                    Color(0x00FFFFFF),
+                disabledBackgroundColor = Color(0x00FFFFFF)
             ),
             elevation = ButtonDefaults.elevation(0.dp),
             contentPadding = PaddingValues(0.dp),
-            shape = CircleShape
+            shape = CircleShape,
+            enabled = d >= viewModel.now
         ) {
-            Text(
-                modifier = Modifier
-                    .width(20.dp),
-                text = date.get(Calendar.DAY_OF_MONTH).toString(),
-                textAlign = TextAlign.Center,
-                fontFamily = robotoFamily,
-                fontWeight = FontWeight.W700,
-                fontSize = 12.sp,
-                color =
-                if(date.get(Calendar.MONTH) == viewModel.selected.get(Calendar.MONTH) &&
-                    date.get(Calendar.DAY_OF_MONTH) == viewModel.selected.get(Calendar.DAY_OF_MONTH))
-                    Color(0xFFFFFFFF)
-                else if (date.get(Calendar.MONTH) == viewModel.now.get(Calendar.MONTH))
-                    Color(0xFF3C6AB0)
-                else
-                    Color(0xFF9BA7CF)
-            )
+            if(d >= viewModel.now) {
+                Text(
+                    modifier = Modifier
+                        .width(20.dp),
+                    text = date.get(Calendar.DAY_OF_MONTH).toString(),
+                    textAlign = TextAlign.Center,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 12.sp,
+                    color =
+                    if (date.get(Calendar.MONTH) == viewModel.selected.get(Calendar.MONTH) &&
+                        date.get(Calendar.DAY_OF_MONTH) == viewModel.selected.get(Calendar.DAY_OF_MONTH)
+                    )
+                        Color(0xFFFFFFFF)
+                    else if (date.get(Calendar.MONTH) == viewModel.now.get(Calendar.MONTH))
+                        Color(0xFF3C6AB0)
+                    else
+                        Color(0xFF9BA7CF)
+                )
+            }
         }
 
     }

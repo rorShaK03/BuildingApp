@@ -1,28 +1,28 @@
 package ru.hse.buildingapp.ui.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.ProjectModel
 import ru.hse.buildingapp.repository.ProjectsRepository
 
+class ProjectViewModelFactory(private val projectId : Int, private val navController: NavHostController) :
+    ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = ProjectViewModel(projectId, navController) as T
+}
 
-class ProjectViewModel(projectId : Int) : ViewModel() {
 
-    var project : ProjectModel by mutableStateOf(ProjectModel(0,
-        "Unknown",
-                    0,
-                    0,
-                    "Unknown"))
+class ProjectViewModel(projectId : Int, val navController: NavHostController) : ViewModel() {
+
+    var project : ProjectModel
 
     init {
-        viewModelScope.launch {
-            if (ProjectsRepository.projects[projectId] != null)
-                project = ProjectsRepository.projects[projectId]!!
-        }
+        val state = ProjectsRepository.projects
+        project = if (state is RespState.Success && state.res[projectId] != null)
+            state.res[projectId]!!
+        else
+            ProjectModel(0, "Unknown", 0, 0, "Unknown", "Unknown")
     }
     /*
     var dueDate : String by mutableStateOf("12/12/1999")

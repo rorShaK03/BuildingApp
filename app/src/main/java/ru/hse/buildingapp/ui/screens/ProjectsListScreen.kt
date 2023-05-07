@@ -10,16 +10,15 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import ru.hse.buildingapp.navigation.NavigationAdapter
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.ProjectStatus
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.ProjectsListViewModel
@@ -27,8 +26,7 @@ import ru.hse.buildingapp.ui.viewmodels.ProjectsListViewModel
 object ProjectsListScreen {
 
         @Composable
-        fun View(navController: NavHostController,
-                 viewModel: ProjectsListViewModel = viewModel()) {
+        fun View(viewModel: ProjectsListViewModel) {
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -51,20 +49,49 @@ object ProjectsListScreen {
                             RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                         )
                         .padding(top = 30.dp)) {
-                    for(project in viewModel.projects) {
-                        ProjectCard(
-                            title = project.projectName,
-                            imageId = project.iconId,
-                            status = project.status
+                    val state = viewModel.projects
+                    if(state is RespState.Success) {
+                        for (project in state.res.values) {
+                            ProjectCard(
+                                title = project.projectName,
+                                imageId = project.iconId,
+                                status = project.projStatus
                             ) {
-                                navController.navigate("project/${project.id}") {
-                                    launchSingleTop = true
-                                    restoreState = true
-
+                                viewModel.navController.navigate(
+                                    NavigationAdapter.Screen.Project.createRoute(
+                                        project.id
+                                    )
+                                )
                             }
-                            }
-                        Divider()
-                        Spacer(Modifier.height(20.dp))
+                            Divider()
+                            Spacer(Modifier.height(20.dp))
+                        }
+                    }
+                    else if(state is RespState.UnknownError) {
+                        Row(Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "Unknown server error. Error code ${state.code}.",
+                                textAlign = TextAlign.Left,
+                                fontFamily = robotoFamily,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp,
+                                color = Color(0xFFF70707),
+                            )
+                        }
+                    }
+                    else if(state is RespState.ConnectionError) {
+                        Row(Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "Server is unavailable. Please, check, your internet connection",
+                                textAlign = TextAlign.Left,
+                                fontFamily = robotoFamily,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp,
+                                color = Color(0xFFF70707),
+                            )
+                        }
                     }
                 }
             }
@@ -115,11 +142,7 @@ object ProjectsListScreen {
                         color = Color(0xFF4F4F4F)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    val statusString: String = when (status) {
-                        ProjectStatus.PREPARING -> "Preparing"
-                        ProjectStatus.ON_PROGRESS -> "On progress"
-                        ProjectStatus.DONE -> "Done"
-                    }
+                    val statusString: String = status.text
                     Text(text = statusString,
                         textAlign = TextAlign.Left,
                         fontFamily = robotoFamily,

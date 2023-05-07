@@ -1,25 +1,30 @@
 package ru.hse.buildingapp.repository
 
+import ru.hse.buildingapp.network.BackendApi
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.ProjectModel
-import ru.hse.buildingapp.network.models.ProjectStatus
+import java.io.IOException
 
 object ProjectsRepository {
-    var projects : MutableMap<Int, ProjectModel> = mutableMapOf()
+    var projects : RespState<MutableMap<Int, ProjectModel>> = RespState.Loading()
         private set
 
 
     suspend fun updateData() {
-        projects[0] = ProjectModel(0,
-            "Sample project name 1",
-            99999,
-            6666,
-            "Москва, улица Васи Пупкина",
-            ProjectStatus.PREPARING)
-        projects[1] = ProjectModel(1,
-            "Sample project name 2",
-            534534,
-            63456,
-            "Санкт-Петербург, улица Пупкина Василия Валентиновича",
-            ProjectStatus.ON_PROGRESS)
+        try {
+            val resp = BackendApi.retrofitService.getProjects()
+            if(resp.isSuccessful) {
+                val updatedProjects : RespState.Success<MutableMap<Int, ProjectModel>> = RespState.Success(mutableMapOf())
+                for (n in resp.body()!!)
+                    updatedProjects.res[n.id] = n
+                projects = updatedProjects
+            }
+            else
+                projects = RespState.UnknownError(resp.code())
+
+        }
+        catch(e : IOException) {
+            projects = RespState.ConnectionError()
+        }
     }
 }

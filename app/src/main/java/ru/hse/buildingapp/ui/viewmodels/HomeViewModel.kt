@@ -1,11 +1,18 @@
 package ru.hse.buildingapp.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ru.hse.buildingapp.repository.PortfolioImagesRepository
 
-class HomeViewModel : ViewModel() {
+class HomeViewModelFactory(private val navController: NavHostController) :
+    ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = HomeViewModel(navController) as T
+}
+
+class HomeViewModel(val navController : NavHostController) : ViewModel() {
     var architecturalImgIds : List<Int> = listOf()
     var interiorImgIds : List<Int> = listOf()
     var consultingImgIds : List<Int> = listOf()

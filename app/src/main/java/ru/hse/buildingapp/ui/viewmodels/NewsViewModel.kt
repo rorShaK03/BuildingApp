@@ -7,21 +7,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.NewsModel
 import ru.hse.buildingapp.repository.NewsRepository
-import java.io.IOException
 
 class NewsViewModel : ViewModel() {
 
-    /*
-    sealed interface NewsUiState {
-        data class Success(val news : List<NewsModel>) : NewsUiState
-        object Loading : NewsUiState
-        object Error : NewsUiState
-    }
-    */
 
-    var newsUiState : List<NewsModel> by mutableStateOf(listOf())
+    var newsUiState : RespState<MutableMap<Int, NewsModel>> by mutableStateOf(RespState.Loading())
         private set
 
     init {
@@ -30,13 +23,8 @@ class NewsViewModel : ViewModel() {
 
     private fun getNews() {
         viewModelScope.launch {
-            newsUiState = try {
-                NewsRepository.updateData()
-                NewsRepository.news.values.toList()
-            }
-            catch(e : IOException) {
-                throw e
-            }
+            NewsRepository.updateData()
+            newsUiState = NewsRepository.news
         }
     }
 

@@ -2,7 +2,6 @@ package ru.hse.buildingapp.ui.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -18,17 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import ru.hse.buildingapp.MainActivity
 import ru.hse.buildingapp.R
+import ru.hse.buildingapp.navigation.NavigationAdapter
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.HomeViewModel
 
 object HomeScreen {
         @Composable
-        fun View(navController: NavHostController,
-                 viewModel : HomeViewModel = viewModel()
-        )
+        fun View(viewModel : HomeViewModel)
         {
             var title by rememberSaveable{ mutableStateOf("Architectural Designs") }
             var images by rememberSaveable{ mutableStateOf(listOf(
@@ -65,8 +61,7 @@ object HomeScreen {
                 Column(
                     Modifier
                         .background(Color(0xFFEDEDED), shape = RoundedCornerShape(20.dp))
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())) {
+                        .fillMaxWidth()) {
                     Text(
                         text = title,
                         textAlign = TextAlign.Left,
@@ -92,13 +87,11 @@ object HomeScreen {
                     Row(
                         Modifier
                             .fillMaxWidth()
+                            .height(80.dp)
                             .padding(20.dp), horizontalArrangement = Arrangement.Center) {
                         Button(
                             onClick = {
-                                navController.navigate(MainActivity.Screen.ProjectRequest.route) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                                viewModel.navController.navigate(NavigationAdapter.Screen.ProjectRequest.route)
                             },
                             Modifier
                                 .width(145.dp)
@@ -124,7 +117,9 @@ object HomeScreen {
         fun ImageColumn(imageIds: List<Int>) {
             Row(
                 Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .verticalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.Center) {
                 Column() {
                     for(i in 0 until imageIds.size / 2) {

@@ -10,6 +10,7 @@ class BookingViewModel : ViewModel() {
 
     val now : Calendar = Calendar.getInstance()
     val lastDisplay : Calendar = Calendar.getInstance()
+    val firstDisplay : Calendar = Calendar.getInstance()
     var selected : Calendar by mutableStateOf(Calendar.getInstance())
     var year: String by mutableStateOf("Unknown")
         private set
@@ -36,14 +37,18 @@ class BookingViewModel : ViewModel() {
             else -> "Unknown"
         }
         year = now.get(Calendar.YEAR).toString()
+        while(firstDisplay.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+            firstDisplay.add(Calendar.DATE, -1)
         selected.timeInMillis = now.timeInMillis
-        lastDisplay.timeInMillis = now.timeInMillis
+        lastDisplay.timeInMillis = firstDisplay.timeInMillis
         lastDisplay.add(Calendar.DATE, 34)
+        lastDisplay.set(Calendar.HOUR_OF_DAY, 23)
+        lastDisplay.set(Calendar.MINUTE, 59)
     }
 
     fun getDayWithOffset(offset: Int) : Calendar {
         val cal : Calendar = Calendar.getInstance()
-        cal.timeInMillis = now.timeInMillis
+        cal.timeInMillis = firstDisplay.timeInMillis
         cal.add(Calendar.DATE, offset)
         return cal
     }
