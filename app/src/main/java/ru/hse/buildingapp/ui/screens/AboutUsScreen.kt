@@ -61,9 +61,8 @@ object AboutUsScreen {
         )
         Spacer(Modifier.height(20.dp))
         Text(
-            text = "INFO STRATEGIC CONSULTANCY\n" +
-                    "Is an information management company, specialized in designing and implementing comprehensive" +
-                    " information technology-based solutions that support clients to successfully achieve their strategy and overarching objectives.",
+            text = "HSE Students os BSE218 and BSE211\n" +
+                    "We are hard working on our Kursach and trying not to die.",
             textAlign = TextAlign.Left,
             fontFamily = robotoFamily,
             fontWeight = FontWeight.W400,
@@ -86,7 +85,7 @@ object AboutUsScreen {
                     painter = painterResource(id = R.drawable.phone_field_icon),
                     contentDescription = null
                 )
-                Text(text = "9008 605 50 00971",
+                Text(text = "Some phone number",
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,
@@ -100,7 +99,7 @@ object AboutUsScreen {
                     painter = painterResource(id = R.drawable.web_icon),
                     contentDescription = null
                 )
-                Text(text = "www.infostrategic.com",
+                Text(text = "www.somesite.com",
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,
@@ -114,7 +113,7 @@ object AboutUsScreen {
                     painter = painterResource(id = R.drawable.email_field_icon),
                     contentDescription = null
                 )
-                Text(text = "info@infostrategic.com",
+                Text(text = "someemail@yandex.ru",
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,
@@ -128,7 +127,7 @@ object AboutUsScreen {
                     painter = painterResource(id = R.drawable.city_field_icon),
                     contentDescription = null
                 )
-                Text(text = "P.O Box: 412024, Dubai, UAE",
+                Text(text = "FCS HSE",
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,

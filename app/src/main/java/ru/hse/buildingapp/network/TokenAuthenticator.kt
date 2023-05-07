@@ -13,7 +13,7 @@ class TokenAuthenticator : Authenticator {
         }
         return response.request()
             .newBuilder()
-            .header("Authorization", BackendApi.tokens.token)
+            .header("Authorization", "Bearer " + BackendApi.tokens.token)
             .build()
     }
 }

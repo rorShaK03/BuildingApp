@@ -92,8 +92,9 @@ object LoginScreen {
                     )
                 }
                 Spacer(Modifier.height(30.dp))
-                val state = viewModel.state
+                var state = viewModel.state
                 if(state is AuthRespState.Success) {
+                    viewModel.state = AuthRespState.Loading
                     Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
                     viewModel.navController.navigate(NavigationAdapter.Screen.Projects.route) {
                         popUpTo(viewModel.navController.graph.findStartDestination().id)

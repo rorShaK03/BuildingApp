@@ -45,6 +45,7 @@ object UnsafeHttpClient {
                         trustAllCerts[0] as X509TrustManager
                     )
                     .hostnameVerifier { hostname: String?, session: SSLSession? -> true }
+                    .authenticator(TokenAuthenticator())
                     .build()
             } catch (e: Exception) {
                 throw RuntimeException(e)

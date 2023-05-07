@@ -19,10 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
+import ru.hse.buildingapp.ui.viewmodels.ProjectRequestViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.hse.buildingapp.network.models.ProjectRequestModel
 
 object ProjectRequestScreen {
         @Composable
-        fun View() {
+        fun View(viewModel : ProjectRequestViewModel = viewModel()) {
             var name by remember { mutableStateOf(TextFieldValue("")) }
             var phone by remember { mutableStateOf(TextFieldValue("")) }
             var email by remember { mutableStateOf(TextFieldValue("")) }
@@ -135,7 +138,9 @@ object ProjectRequestScreen {
                 }
                 Spacer(Modifier.height(30.dp))
                 Button(
-                    onClick = { },
+                    onClick = { viewModel.createRequest(ProjectRequestModel(name.text, email.text, phone.text,
+                        projName.text, projType.text, totalArea.text.toInt(),
+                        budget.text.toInt(), city.text))},
                     Modifier
                         .width(145.dp)
                         .wrapContentHeight()

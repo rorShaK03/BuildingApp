@@ -15,8 +15,8 @@ import ru.hse.buildingapp.network.authmodels.Credentials
 import ru.hse.buildingapp.network.authmodels.RefreshTokensAdapter
 import ru.hse.buildingapp.network.authmodels.Tokens
 import ru.hse.buildingapp.network.models.NewsModel
-import ru.hse.buildingapp.network.models.PortfolioProjectModel
 import ru.hse.buildingapp.network.models.ProjectModel
+import ru.hse.buildingapp.network.models.ProjectRequestModel
 import java.io.IOException
 
 
@@ -24,14 +24,16 @@ interface BackendService {
 
 
     @GET("api/News")
-    suspend fun getNews(@Query("skip") skip: Int, @Query("take") take: Int) : Response<List<NewsModel>>
-    @GET("api/Interiors")
-    suspend fun getInteriors() : List<PortfolioProjectModel>
+    suspend fun getNews(@Query("skip") skip : Int, @Query("take") take : Int) : Response<List<NewsModel>>
+
     @GET("api/Project")
     suspend fun getProjects() : Response<List<ProjectModel>>
+    @GET("api/Reports")
+    suspend fun getReports(@Query("id") projId : Int)
+    @POST("api/Proposal")
+    suspend fun projectRequest(@Body p : ProjectRequestModel)
     @POST("accounts/login")
     suspend fun login(@Body c : Credentials) : Response<Tokens>
-
     @POST("accounts/refresh-token")
     suspend fun refreshToken(@Body t : RefreshTokensAdapter) : RefreshTokensAdapter
 

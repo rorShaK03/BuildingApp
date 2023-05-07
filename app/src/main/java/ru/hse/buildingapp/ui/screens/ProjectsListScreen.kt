@@ -70,9 +70,9 @@ object ProjectsListScreen {
                     else if(state is RespState.UnknownError) {
                         Row(Modifier.fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically) {
-                            Text(
+                            Text( modifier = Modifier.fillMaxWidth(),
                                 text = "Unknown server error. Error code ${state.code}.",
-                                textAlign = TextAlign.Left,
+                                textAlign = TextAlign.Center,
                                 fontFamily = robotoFamily,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 13.sp,
@@ -83,9 +83,9 @@ object ProjectsListScreen {
                     else if(state is RespState.ConnectionError) {
                         Row(Modifier.fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically) {
-                            Text(
+                            Text( modifier = Modifier.fillMaxWidth(),
                                 text = "Server is unavailable. Please, check, your internet connection",
-                                textAlign = TextAlign.Left,
+                                textAlign = TextAlign.Center,
                                 fontFamily = robotoFamily,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 13.sp,
