@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import ru.hse.buildingapp.network.RetrofitClient
 import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.ProjectModel
 import ru.hse.buildingapp.network.models.ProjectStatus
@@ -15,6 +16,7 @@ import ru.hse.buildingapp.repository.ProjectsRepository
 
 class ProjectsListViewModelFactory(private val navController: NavHostController) :
     ViewModelProvider.NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T = ProjectsListViewModel(navController) as T
 }
 
@@ -26,11 +28,19 @@ class ProjectsListViewModel(val navController: NavHostController) : ViewModel() 
         var onProgressFraction : Float by mutableStateOf(0.0f)
         var doneFraction : Float by mutableStateOf(0.0f)
 
+        var isRefreshing by mutableStateOf(false)
+
         init {
-            viewModelScope.launch {
-                ProjectsRepository.updateData()
-                projects = ProjectsRepository.projects
-                updateFractions()
+            refresh()
+        }
+
+        fun refresh() {
+            if(RetrofitClient.tokens.token.isNotEmpty()) {
+                viewModelScope.launch {
+                    ProjectsRepository.updateData()
+                    projects = ProjectsRepository.projects
+                    updateFractions()
+                }
             }
         }
 

@@ -8,11 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import ru.hse.buildingapp.network.BackendApi
+import ru.hse.buildingapp.network.RetrofitClient
 import ru.hse.buildingapp.network.authmodels.AuthRespState
 
 class LoginViewModelFactory(private val navController: NavHostController) :
     ViewModelProvider.NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T = LoginViewModel(navController) as T
 }
 
@@ -23,7 +24,7 @@ class LoginViewModel(val navController: NavHostController) : ViewModel() {
     fun submit(login : String, password : String) {
         state = AuthRespState.Loading
         viewModelScope.launch {
-            state = BackendApi.authorize(login, password)
+            state = RetrofitClient.authorize(login, password)
         }
     }
 }

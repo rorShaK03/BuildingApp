@@ -3,8 +3,13 @@ package ru.hse.buildingapp.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,15 +25,20 @@ import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.NewsViewModel
 
 object NewsScreen {
+        @OptIn(ExperimentalMaterialApi::class)
         @Composable
         fun View(
             viewModel : NewsViewModel = viewModel()
         ) {
+            val isRefreshing = viewModel.isRefreshing
+            val pullRefreshState = rememberPullRefreshState(isRefreshing, {viewModel.getNews()})
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(color = Color(0xFFF0F0F0), RoundedCornerShape(20.dp))
-                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)) {
+                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                    .pullRefresh(pullRefreshState)
+                    .verticalScroll(rememberScrollState())) {
                 /*
                 NewsCard(title = "Palisades Development Company",
                         text = "Palisades Development Company LLC was incorporated in 2015 to market, manage, lease, buy and sell land in The Palisades ... ",

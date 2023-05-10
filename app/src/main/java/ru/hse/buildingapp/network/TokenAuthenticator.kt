@@ -9,11 +9,11 @@ import okhttp3.Route
 class TokenAuthenticator : Authenticator {
     override fun authenticate(route : Route?, response : Response) : Request? {
         runBlocking {
-            BackendApi.refreshToken()
+            RetrofitClient.refreshToken()
         }
         return response.request()
             .newBuilder()
-            .header("Authorization", "Bearer " + BackendApi.tokens.token)
+            .header("Authorization", "Bearer " + RetrofitClient.tokens.token)
             .build()
     }
 }

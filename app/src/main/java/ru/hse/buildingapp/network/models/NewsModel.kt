@@ -10,4 +10,4 @@ data class NewsModel(val id: Int,
                      val title: String = "Test title",
                      @SerialName("no_parse")
                      val iconId: Int = R.drawable.news_dcts,
-                     val date: String = "Oct - 2019")
+                     val date: String = "")

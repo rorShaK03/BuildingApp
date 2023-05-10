@@ -8,7 +8,7 @@ data class ProjectRequestModel( val name : String,
                                 val number : String,
                                 val projectName : String,
                                 val typeProject : String,
-                                val totalArea : Int,
-                                val budget : Int,
+                                val area : Int,
+                                val price : Int,
                                 val city : String
                                 )

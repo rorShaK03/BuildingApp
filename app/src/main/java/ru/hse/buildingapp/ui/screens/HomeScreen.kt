@@ -174,7 +174,7 @@ object HomeScreen {
         @Composable
         fun SectionButtonsRow(onClick: (Int) -> Unit)
         {
-            var active by remember{ mutableStateOf(0) }
+            var active by rememberSaveable{ mutableStateOf(0) }
             Row(
                 Modifier
                     .height(100.dp)

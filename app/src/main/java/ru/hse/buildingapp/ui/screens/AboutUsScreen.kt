@@ -61,8 +61,7 @@ object AboutUsScreen {
         )
         Spacer(Modifier.height(20.dp))
         Text(
-            text = "HSE Students os BSE218 and BSE211\n" +
-                    "We are hard working on our Kursach and trying not to die.",
+            text = stringResource(id = R.string.about_us_desc),
             textAlign = TextAlign.Left,
             fontFamily = robotoFamily,
             fontWeight = FontWeight.W400,

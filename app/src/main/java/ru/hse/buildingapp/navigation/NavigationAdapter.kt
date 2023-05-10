@@ -35,11 +35,11 @@ object NavigationAdapter {
         object News : Screen("news",
             R.string.news,
             R.drawable.news_icon)
-        object AboutUs : Screen("aboutus",
-            R.string.about_us,
+        object AboutUs : Screen("contacts",
+            R.string.contacts,
             R.drawable.about_us_icon_dark,
             R.drawable.about_us_icon_light)
-        object ProjectRequest: Screen("projectrequest",
+        object ProjectRequest: Screen("home/projectrequest",
             R.string.project_request)
         object Login: Screen("login",
             R.string.login,

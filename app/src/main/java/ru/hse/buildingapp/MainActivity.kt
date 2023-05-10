@@ -36,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.hse.buildingapp.navigation.NavigationAdapter
 import ru.hse.buildingapp.ui.screens.*
-import ru.hse.buildingapp.ui.theme.BuildingAppTheme
 import ru.hse.buildingapp.ui.viewmodels.*
 
 var robotoFamily = FontFamily(
@@ -58,21 +57,19 @@ class MainActivity : ComponentActivity() {
             scaffoldState = rememberScaffoldState()
             scope = rememberCoroutineScope()
             navController = rememberNavController()
-            BuildingAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                )
-                {
-                    val helperNavController : NavHostController = rememberNavController()
-                    NavHost(navController = helperNavController,
-                            startDestination = NavigationAdapter.Screen.LanguageChoose.route) {
-                        composable("lang-choose") {
-                            LanguageChooseScreen.View(helperNavController)
-                        }
-                        composable("main-app") {
-                            Content()
-                        }
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colors.background
+            )
+            {
+                val helperNavController : NavHostController = rememberNavController()
+                NavHost(navController = helperNavController,
+                    startDestination = NavigationAdapter.Screen.LanguageChoose.route) {
+                    composable("lang-choose") {
+                        LanguageChooseScreen.View(helperNavController)
+                    }
+                    composable("main-app") {
+                        Content()
                     }
                 }
             }
@@ -261,7 +258,7 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(NavigationAdapter.Screen.ProjectRequest.route) {
                     title = stringResource(id = NavigationAdapter.Screen.ProjectRequest.labelId!!)
-                    ProjectRequestScreen.View()
+                    ProjectRequestScreen.View(viewModel(factory = ProjectRequestViewModelFactory(navController)))
                 }
                 composable(NavigationAdapter.Screen.Login.route) {
                     title = stringResource(id = NavigationAdapter.Screen.Login.labelId!!)

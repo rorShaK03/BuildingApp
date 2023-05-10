@@ -8,14 +8,21 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,16 +30,22 @@ import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.navigation.NavigationAdapter
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.ProjectViewModel
+import ru.hse.buildingapp.R
 
 object ProjectScreen {
+        @OptIn(ExperimentalMaterialApi::class)
         @Composable
         fun View(
             viewModel : ProjectViewModel
         ) {
+            val isRefreshing = viewModel.isRefreshing
+            val pullRefreshState: PullRefreshState = rememberPullRefreshState(isRefreshing, {viewModel.refresh()})
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color(0xFF3C6AB0))
+                        .pullRefresh(pullRefreshState)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
                         modifier = Modifier
@@ -44,8 +57,9 @@ object ProjectScreen {
                         fontSize = 16.sp,
                         color = Color(0xFFFFFFFF)
                     )
+                    val imgState  = viewModel.projectImg
                     Image(
-                        painter = painterResource(id = viewModel.project.projectImageId),
+                        bitmap = imgState?.asImageBitmap() ?: ImageBitmap.imageResource(R.drawable.project_img_sample),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -57,7 +71,7 @@ object ProjectScreen {
                         .background(Color(0xFFFFFFFF))){
                         Text( modifier = Modifier
                                 .padding(top = 25.dp, bottom = 10.dp, start = 18.dp),
-                            text = "General Information",
+                            text = stringResource(id = R.string.general_information),
                             textAlign = TextAlign.Left,
                             fontFamily = robotoFamily,
                             fontWeight = FontWeight.W700,
@@ -67,10 +81,10 @@ object ProjectScreen {
                         Column(modifier = Modifier
                             .verticalScroll(rememberScrollState())
                             .height(130.dp)) {
-                            Property(name = "Adress", value = viewModel.project.address)
-                            Property(name = "Area", value = viewModel.project.area.toString())
-                            Property(name = "Budget", value = viewModel.project.budget.toString())
-                            Property(name = "Status", value = viewModel.project.projStatus.text)
+                            Property(name = stringResource(id = R.string.address), value = viewModel.project.address)
+                            Property(name = stringResource(id = R.string.area), value = viewModel.project.area.toString())
+                            Property(name = stringResource(id = R.string.budget), value = viewModel.project.budget.toString())
+                            Property(name = stringResource(id = R.string.status), value = viewModel.project.projStatus.text)
                             /*
                             Property(name = "Due Date", value = viewModel.dueDate)
                             Property(name = "Location", value = viewModel.location)
@@ -106,7 +120,7 @@ object ProjectScreen {
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Text(
-                                    text = "Reports",
+                                    text = stringResource(id = R.string.reports),
                                     textAlign = TextAlign.Left,
                                     fontFamily = robotoFamily,
                                     fontWeight = FontWeight.Medium,

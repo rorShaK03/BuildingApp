@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -82,7 +83,7 @@ object BookingScreen {
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF3C6AB0)),
                 onClick = {}) {
                 Text(
-                    text = "Book",
+                    text = stringResource(id = R.string.book),
                     textAlign = TextAlign.Center,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W400,
@@ -103,7 +104,7 @@ object BookingScreen {
             Text(modifier = Modifier
                 .width(100.dp)
                 .padding(top = 12.dp, bottom = 20.dp, start = 16.dp),
-                text = "Select time",
+                text = stringResource(id = R.string.select_time),
                 textAlign = TextAlign.Left,
                 fontFamily = robotoFamily,
                 fontWeight = FontWeight.W400,
@@ -166,7 +167,7 @@ object BookingScreen {
                 Text(
                     modifier = Modifier
                         .width(60.dp),
-                    text = if (isAvailable) "available" else "booked",
+                    text = if (isAvailable) stringResource(id = R.string.available) else stringResource(R.string.booked),
                     textAlign = TextAlign.Left,
                     fontFamily = robotoFamily,
                     fontWeight = FontWeight.W500,
@@ -194,7 +195,8 @@ object BookingScreen {
                     for (day in days) {
                         Text(
                             modifier = Modifier
-                                .width(20.dp),
+                                .width(20.dp)
+                                .padding(start = 5.dp),
                             text = day,
                             textAlign = TextAlign.Left,
                             fontFamily = robotoFamily,

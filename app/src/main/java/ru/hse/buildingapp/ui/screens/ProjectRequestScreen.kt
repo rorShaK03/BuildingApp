@@ -1,5 +1,6 @@
 package ru.hse.buildingapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -21,7 +23,9 @@ import ru.hse.buildingapp.R
 import ru.hse.buildingapp.robotoFamily
 import ru.hse.buildingapp.ui.viewmodels.ProjectRequestViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.hse.buildingapp.network.models.ProjectRequestModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import ru.hse.buildingapp.navigation.NavigationAdapter
+import ru.hse.buildingapp.network.authmodels.RespState
 
 object ProjectRequestScreen {
         @Composable
@@ -35,6 +39,25 @@ object ProjectRequestScreen {
             var budget by remember { mutableStateOf(TextFieldValue("")) }
             var city by remember { mutableStateOf(TextFieldValue("")) }
             var notes by remember { mutableStateOf(TextFieldValue("")) }
+
+            val context = LocalContext.current
+
+            if(viewModel.state is RespState.Success) {
+                viewModel.state = RespState.Loading()
+                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+                viewModel.navController.navigate(
+                    NavigationAdapter.Screen.Home.route
+                ) {
+                    popUpTo(viewModel.navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            }
+            else if(viewModel.state is RespState.UnknownError
+                    || viewModel.state is RespState.ConnectionError) {
+                viewModel.state = RespState.Loading()
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show()
+            }
+
             Column(
                 Modifier
                     .background(Color(0xFFEDEDED), shape = RoundedCornerShape(20.dp))
@@ -61,7 +84,7 @@ object ProjectRequestScreen {
                 )
                 {
                     Text(
-                        text = "Please insert your informations",
+                        text = "Please insert information about yourself",
                         textAlign = TextAlign.Center,
                         fontFamily = robotoFamily,
                         fontWeight = FontWeight.Medium,
@@ -87,7 +110,7 @@ object ProjectRequestScreen {
                 )
                 {
                     Text(
-                        text = "Please insert your Project Informations",
+                        text = "Please insert information about your project",
                         textAlign = TextAlign.Center,
                         fontFamily = robotoFamily,
                         fontWeight = FontWeight.Medium,
@@ -138,9 +161,9 @@ object ProjectRequestScreen {
                 }
                 Spacer(Modifier.height(30.dp))
                 Button(
-                    onClick = { viewModel.createRequest(ProjectRequestModel(name.text, email.text, phone.text,
-                        projName.text, projType.text, totalArea.text.toInt(),
-                        budget.text.toInt(), city.text))},
+                    onClick = { viewModel.submit(name.text, email.text, phone.text,
+                    projName.text, projType.text, totalArea.text, budget.text, city.text)
+                        },
                     Modifier
                         .width(145.dp)
                         .wrapContentHeight()

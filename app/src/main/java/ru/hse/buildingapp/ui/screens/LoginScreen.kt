@@ -47,6 +47,47 @@ object LoginScreen {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                    val state = viewModel.state
+                    if (state is AuthRespState.Success) {
+                        viewModel.state = AuthRespState.Loading
+                        Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
+                        viewModel.navController.navigate(NavigationAdapter.Screen.Projects.route) {
+                            popUpTo(viewModel.navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    } else if (state is AuthRespState.InvalidCredentials) {
+                        Text(
+                            text = "Invalid login or password. Try again!",
+                            textAlign = TextAlign.Left,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = Color(0xFFF70707),
+                        )
+                    } else if (state is AuthRespState.UnknownServerError) {
+                        Text(
+                            text = "Unknown server error. Error code ${state.code}.",
+                            textAlign = TextAlign.Left,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = Color(0xFFF70707),
+                        )
+                    } else if (state is AuthRespState.ConnectionError) {
+                        Text(
+                            text = "Server is unavailable. Please, check, your internet connection",
+                            textAlign = TextAlign.Left,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = Color(0xFFF70707),
+                        )
+                    }
+                }
                 Text(
                     text = "Please insert your login and password",
                     textAlign = TextAlign.Center,
@@ -54,8 +95,9 @@ object LoginScreen {
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
                     color = Color(0xFF3C6AB0),
-                    modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
+                    modifier = Modifier.padding(top = 24.dp)
                 )
+                Spacer(Modifier.height(30.dp))
                 Column(
                     Modifier
                         .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(20.dp))
@@ -83,7 +125,7 @@ object LoginScreen {
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
-                        text = "Send",
+                        text = "Login",
                         textAlign = TextAlign.Left,
                         fontFamily = robotoFamily,
                         fontWeight = FontWeight.Medium,
@@ -91,46 +133,8 @@ object LoginScreen {
                         color = Color(0xFFFFFFFF),
                     )
                 }
-                Spacer(Modifier.height(30.dp))
-                var state = viewModel.state
-                if(state is AuthRespState.Success) {
-                    viewModel.state = AuthRespState.Loading
-                    Toast.makeText(LocalContext.current, "Success!", Toast.LENGTH_SHORT).show()
-                    viewModel.navController.navigate(NavigationAdapter.Screen.Projects.route) {
-                        popUpTo(viewModel.navController.graph.findStartDestination().id)
-                        launchSingleTop = true
-                    }
-                }
-                else if(state is AuthRespState.InvalidCredentials) {
-                    Text(
-                        text = "Invalid login or password. Try again!",
-                        textAlign = TextAlign.Left,
-                        fontFamily = robotoFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 13.sp,
-                        color = Color(0xFFF70707),
-                    )
-                }
-                else if(state is AuthRespState.UnknownServerError) {
-                    Text(
-                        text = "Unknown server error. Error code ${state.code}.",
-                        textAlign = TextAlign.Left,
-                        fontFamily = robotoFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 13.sp,
-                        color = Color(0xFFF70707),
-                    )
-                }
-                else if(state is AuthRespState.ConnectionError) {
-                    Text(
-                        text = "Server is unavailable. Please, check, your internet connection",
-                        textAlign = TextAlign.Left,
-                        fontFamily = robotoFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 13.sp,
-                        color = Color(0xFFF70707),
-                    )
-                }
+
+
             }
         }
 

@@ -4,9 +4,20 @@
     <string name="projects">Projects</string>
     <string name="news">News</string>
     <string name="about_us">About us</string>
+    <string name="about_us_desc">HSE Students os BSE218 and BSE211\nWe are a group of FSC students and this is our course project</string>
+    <string name="contacts">Contacts</string>
     <string name="project_request">New project request</string>
     <string name="login">Log in</string>
     <string name="booking">Booking</string>
     <string name="our_team">Our Team</string>
     <string name="reports">Reports</string>
+    <string name="available">available</string>
+    <string name="booked">booked</string>
+    <string name="select_time">Select time</string>
+    <string name="book">Book</string>
+    <string name="general_information">General information</string>
+    <string name="address">Address</string>
+    <string name="area">Area</string>
+    <string name="budget">Budget</string>
+    <string name="status">Status</string>
 </resources>

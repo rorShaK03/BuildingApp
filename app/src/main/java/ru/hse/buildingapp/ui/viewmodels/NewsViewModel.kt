@@ -17,12 +17,15 @@ class NewsViewModel : ViewModel() {
     var newsUiState : RespState<MutableMap<Int, NewsModel>> by mutableStateOf(RespState.Loading())
         private set
 
+    var isRefreshing by mutableStateOf(false)
+
     init {
         getNews()
     }
 
-    private fun getNews() {
+    fun getNews() {
         viewModelScope.launch {
+            newsUiState = RespState.Loading()
             NewsRepository.updateData()
             newsUiState = NewsRepository.news
         }

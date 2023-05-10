@@ -1,14 +1,15 @@
 package ru.hse.buildingapp.ui.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.navigation.NavigationAdapter
+import ru.hse.buildingapp.network.RetrofitClient
 import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.network.models.ProjectStatus
 import ru.hse.buildingapp.robotoFamily
@@ -25,13 +27,18 @@ import ru.hse.buildingapp.ui.viewmodels.ProjectsListViewModel
 
 object ProjectsListScreen {
 
+        @OptIn(ExperimentalMaterialApi::class)
         @Composable
         fun View(viewModel: ProjectsListViewModel) {
+            val isRefreshing = viewModel.isRefreshing
+            val pullRefreshState = rememberPullRefreshState(isRefreshing, {viewModel.refresh()})
             Column(
                 Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)
-                    .background(Color(0xFF3C6AB0))) {
+                    .background(Color(0xFF3C6AB0))
+                    .pullRefresh(pullRefreshState)
+                    .verticalScroll(rememberScrollState())) {
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -49,6 +56,19 @@ object ProjectsListScreen {
                             RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                         )
                         .padding(top = 30.dp)) {
+                    if(RetrofitClient.tokens.token.isEmpty()) {
+                        Row(Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            Text( modifier = Modifier.fillMaxWidth(),
+                                text = "Please, authorize before watching projects list.",
+                                textAlign = TextAlign.Center,
+                                fontFamily = robotoFamily,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 13.sp,
+                                color = Color(0xFFF70707),
+                            )
+                        }
+                    }
                     val state = viewModel.projects
                     if(state is RespState.Success) {
                         for (project in state.res.values) {
