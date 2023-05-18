@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import ru.hse.buildingapp.repository.MeetingsRepository
+import ru.hse.buildingapp.repository.NewsRepository
 import ru.hse.buildingapp.repository.PortfolioImagesRepository
 
 class HomeViewModelFactory(private val navController: NavHostController) :
@@ -21,6 +23,8 @@ class HomeViewModel(val navController : NavHostController) : ViewModel() {
     init {
         viewModelScope.launch {
             PortfolioImagesRepository.updateData()
+            NewsRepository.updateData()
+            MeetingsRepository.updateData()
             architecturalImgIds = PortfolioImagesRepository.architecturalImgIds
             interiorImgIds = PortfolioImagesRepository.interiorImgIds
             consultingImgIds = PortfolioImagesRepository.consultingImgIds

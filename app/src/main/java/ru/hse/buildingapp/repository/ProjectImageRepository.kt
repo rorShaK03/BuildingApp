@@ -1,12 +1,8 @@
 package ru.hse.buildingapp.repository
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import ru.hse.buildingapp.network.RetrofitClient
 import ru.hse.buildingapp.network.authmodels.RespState
-import java.io.IOException
 
 object ProjectImageRepository {
     var img : RespState<Bitmap> = RespState.Loading()
@@ -14,6 +10,7 @@ object ProjectImageRepository {
     private val mutex = Mutex()
 
     suspend fun updateData() {
+        /*
         mutex.withLock {
             try {
                 img = RespState.Loading()
@@ -28,5 +25,7 @@ object ProjectImageRepository {
                 img = RespState.ConnectionError()
             }
         }
+         */
+        img = RespState.UnknownError(-1)
     }
 }

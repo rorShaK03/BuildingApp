@@ -31,8 +31,7 @@ object ReportsScreen {
             .fillMaxSize()
             .padding(vertical = 10.dp, horizontal = 13.dp)
             .verticalScroll(rememberScrollState())
-            .pullRefresh(pullRefreshState)
-            .verticalScroll(rememberScrollState())) {
+            .pullRefresh(pullRefreshState)) {
             val state = viewModel.reports
             if(state is RespState.Success) {
                 for (report in state.res.values) {

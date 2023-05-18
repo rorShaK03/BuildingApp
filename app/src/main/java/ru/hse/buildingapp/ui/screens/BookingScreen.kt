@@ -1,5 +1,6 @@
 package ru.hse.buildingapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import ru.hse.buildingapp.R
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,12 +20,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.hse.buildingapp.ui.viewmodels.BookingViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.hse.buildingapp.network.authmodels.RespState
 import ru.hse.buildingapp.robotoFamily
 import java.util.*
 
 object BookingScreen {
     @Composable
     fun View(viewModel : BookingViewModel = viewModel()) {
+        val state = viewModel.state
+        val context = LocalContext.current
+        if(state is RespState.Success) {
+            viewModel.state = RespState.Loading()
+            Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+        }
+        else if(state is RespState.UnknownError) {
+            viewModel.state = RespState.Loading()
+            Toast.makeText(context, "Server error! Code ${state.code}", Toast.LENGTH_SHORT).show()
+        }
+        else if(state is RespState.Unauthorized) {
+            viewModel.state = RespState.Loading()
+            Toast.makeText(context, "Please, authorize before booking!", Toast.LENGTH_SHORT).show()
+        }
         Row(modifier = Modifier
             .padding(vertical = 10.dp)
             .fillMaxWidth(),
@@ -81,7 +98,10 @@ object BookingScreen {
                 .height(40.dp),
                 shape = RoundedCornerShape(7.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF3C6AB0)),
-                onClick = {}) {
+                onClick = {if(viewModel.selected.get(Calendar.HOUR_OF_DAY) == 0)
+                                Toast.makeText(context, "Please, choose the time!", Toast.LENGTH_SHORT).show()
+                           else
+                                viewModel.submit()}) {
                 Text(
                     text = stringResource(id = R.string.book),
                     textAlign = TextAlign.Center,
@@ -96,6 +116,7 @@ object BookingScreen {
 
     @Composable
     private fun TimePicker(viewModel: BookingViewModel) {
+        val bookedMeetings = viewModel.bookedMeetings
         Column(modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
@@ -116,7 +137,10 @@ object BookingScreen {
                 .verticalScroll(rememberScrollState())) {
                 for (h in 9..21) {
                     Divider()
-                    TimeVariant(h, isAvailable = true, viewModel)
+                    val variant = Calendar.getInstance()
+                    variant.timeInMillis = viewModel.selected.timeInMillis
+                    variant.set(Calendar.HOUR_OF_DAY, h)
+                    TimeVariant(h, isAvailable = !bookedMeetings.any{viewModel.equalToHours(it, variant)}, viewModel)
                 }
             }
         }
@@ -124,7 +148,8 @@ object BookingScreen {
 
     @Composable
     private fun TimeVariant(hour : Int, isAvailable : Boolean, viewModel: BookingViewModel) {
-        Row(modifier = Modifier
+        Row(modifier = (
+        if (isAvailable) Modifier
             .fillMaxWidth()
             .height(37.dp)
             .clickable { viewModel.setSelectedHour(hour) }
@@ -133,7 +158,16 @@ object BookingScreen {
                     Color(0x213C6AB0)
                 else
                     Color(0x00FFFFFF)
-            )) {
+            )
+        else Modifier
+            .fillMaxWidth()
+            .height(37.dp)
+            .background(
+                if (viewModel.selected.get(Calendar.HOUR_OF_DAY) == hour)
+                    Color(0x213C6AB0)
+                else
+                    Color(0x00FFFFFF)
+            ))) {
             Row(modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 10.dp, bottom = 10.dp),

@@ -80,7 +80,7 @@ object AboutUsScreen {
             Row(modifier = Modifier
                 .padding(bottom = 13.dp)) {
                 Image( modifier = Modifier
-                    .padding(end = 10.dp),
+                    .padding(end = 15.dp),
                     painter = painterResource(id = R.drawable.phone_field_icon),
                     contentDescription = null
                 )
@@ -94,7 +94,7 @@ object AboutUsScreen {
             Row(modifier = Modifier
                 .padding(bottom = 13.dp)) {
                 Image( modifier = Modifier
-                    .padding(end = 10.dp),
+                    .padding(end = 15.dp),
                     painter = painterResource(id = R.drawable.web_icon),
                     contentDescription = null
                 )
@@ -122,7 +122,7 @@ object AboutUsScreen {
             Row(modifier = Modifier
                 .padding(bottom = 13.dp)) {
                 Image( modifier = Modifier
-                    .padding(end = 10.dp),
+                    .padding(end = 15.dp),
                     painter = painterResource(id = R.drawable.city_field_icon),
                     contentDescription = null
                 )

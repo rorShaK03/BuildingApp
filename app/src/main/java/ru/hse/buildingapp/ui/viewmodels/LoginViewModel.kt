@@ -10,6 +10,8 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ru.hse.buildingapp.network.RetrofitClient
 import ru.hse.buildingapp.network.authmodels.AuthRespState
+import ru.hse.buildingapp.repository.MeetingsRepository
+import ru.hse.buildingapp.repository.NewsRepository
 
 class LoginViewModelFactory(private val navController: NavHostController) :
     ViewModelProvider.NewInstanceFactory() {
@@ -25,6 +27,8 @@ class LoginViewModel(val navController: NavHostController) : ViewModel() {
         state = AuthRespState.Loading
         viewModelScope.launch {
             state = RetrofitClient.authorize(login, password)
+            NewsRepository.updateData()
+            MeetingsRepository.updateData()
         }
     }
 }

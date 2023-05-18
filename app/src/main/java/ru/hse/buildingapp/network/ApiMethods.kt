@@ -12,10 +12,7 @@ import ru.hse.buildingapp.network.authmodels.AuthRespState
 import ru.hse.buildingapp.network.authmodels.Credentials
 import ru.hse.buildingapp.network.authmodels.RefreshTokensAdapter
 import ru.hse.buildingapp.network.authmodels.Tokens
-import ru.hse.buildingapp.network.models.NewsModel
-import ru.hse.buildingapp.network.models.ProjectModel
-import ru.hse.buildingapp.network.models.ProjectRequestModel
-import ru.hse.buildingapp.network.models.ReportModel
+import ru.hse.buildingapp.network.models.*
 import java.io.IOException
 
 
@@ -29,8 +26,12 @@ interface ApiMethods {
     suspend fun getProjects() : Response<List<ProjectModel>>
     @GET("api/Reports/{id}")
     suspend fun getReports(@Path("id") projId : Int) : Response<List<ReportModel>>
+    @GET("api/Event/admin")
+    suspend fun getMeetings() : Response<List<MeetingModel>>
     @GET("api/ImageProject/{id}")
     suspend fun getImage(@Path("id") imgId : Int) : Response<ResponseBody>
+    @POST("api/Event")
+    suspend fun setMeeting(@Body p : MeetingModel) : Response<Unit>
     @POST("api/Proposal")
     suspend fun projectRequest(@Body p : ProjectRequestModel) : Response<Unit>
     @POST("accounts/login")

@@ -26,6 +26,8 @@ object HomeScreen {
         @Composable
         fun View(viewModel : HomeViewModel)
         {
+            val imageColumnScrollStates = listOf<ScrollState>(rememberScrollState(0), rememberScrollState(0), rememberScrollState(0), rememberScrollState(0))
+            var curImageColScrollState by remember{mutableStateOf(imageColumnScrollStates[0])}
             var title by rememberSaveable{ mutableStateOf("Architectural Designs") }
             var images by rememberSaveable{ mutableStateOf(listOf(
                 R.drawable.house1,
@@ -48,13 +50,17 @@ object HomeScreen {
                 SectionButtonsRow(onClick = {
                     when(it) {
                         0 -> {title = "Architectural Designs"
-                            images = viewModel.architecturalImgIds }
+                            images = viewModel.architecturalImgIds
+                            curImageColScrollState = imageColumnScrollStates[0]}
                         1 -> {title = "Interior Design"
-                            images = viewModel.interiorImgIds}
+                            images = viewModel.interiorImgIds
+                            curImageColScrollState = imageColumnScrollStates[1]}
                         2 -> {title = "Consultings Engineering"
-                            images = viewModel.consultingImgIds}
+                            images = viewModel.consultingImgIds
+                            curImageColScrollState = imageColumnScrollStates[2]}
                         3 -> {title = "Real estate Consulting"
-                            images = viewModel.realEstateImgIds}
+                            images = viewModel.realEstateImgIds
+                            curImageColScrollState = imageColumnScrollStates[3]}
                     }
                 })
                 Spacer(Modifier.height(14.dp))
@@ -81,8 +87,10 @@ object HomeScreen {
                         modifier = Modifier.padding(start = 19.dp, top = 11.dp)
                     )
                     Spacer(Modifier.height(10.dp))
+
                     ImageColumn(
-                        imageIds = images
+                        imageIds = images,
+                        scrollState = curImageColScrollState
                     )
                     Row(
                         Modifier
@@ -114,12 +122,12 @@ object HomeScreen {
 
 //        @OptIn(ExperimentalFoundationApi::class)
         @Composable
-        fun ImageColumn(imageIds: List<Int>) {
+        fun ImageColumn(imageIds: List<Int>, scrollState: ScrollState) {
             Row(
                 Modifier
                     .fillMaxWidth()
                     .height(250.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(scrollState),
             horizontalArrangement = Arrangement.Center) {
                 Column() {
                     for(i in 0 until imageIds.size / 2) {
@@ -131,7 +139,7 @@ object HomeScreen {
                             modifier = Modifier
                                 .padding(20.dp)
                                 .clip(RoundedCornerShape(20))
-                                .size(width = 125.dp, height = 200.dp)
+                                .size(width = 125.dp, height = 190.dp)
                         )
                     }
                 }
@@ -146,7 +154,7 @@ object HomeScreen {
                             modifier = Modifier
                                 .padding(20.dp)
                                 .clip(RoundedCornerShape(20))
-                                .size(width = 125.dp, height = 200.dp)
+                                .size(width = 125.dp, height = 190.dp)
                         )
                     }
                 }

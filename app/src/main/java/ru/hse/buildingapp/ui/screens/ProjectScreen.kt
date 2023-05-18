@@ -39,13 +39,11 @@ object ProjectScreen {
             viewModel : ProjectViewModel
         ) {
             val isRefreshing = viewModel.isRefreshing
-            val pullRefreshState: PullRefreshState = rememberPullRefreshState(isRefreshing, {viewModel.refresh()})
+            val pullRefreshState = rememberPullRefreshState(isRefreshing, {viewModel.refresh()})
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color(0xFF3C6AB0))
-                        .pullRefresh(pullRefreshState)
-                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
                         modifier = Modifier
@@ -79,6 +77,7 @@ object ProjectScreen {
                             color = Color(0xFF3C6AB0)
                         )
                         Column(modifier = Modifier
+                            .pullRefresh(pullRefreshState)
                             .verticalScroll(rememberScrollState())
                             .height(130.dp)) {
                             Property(name = stringResource(id = R.string.address), value = viewModel.project.address)
